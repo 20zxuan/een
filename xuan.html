@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘胤轩个人事项提醒及重要情景督促 - 不忘初心专题</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            width: 1280px;
+            height: 900px;
+            margin: 0 auto;
+            background-color: #f5f7fa;
+            color: #333;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* 顶部区域 */
+        .header {
+            background: linear-gradient(135deg, #1a5fb4 0%, #2d8cf0 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid #ff6b35;
+            height: 100px;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 40px;
+            background-color: white;
+            color: #1a5fb4;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .site-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .site-title p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .user-motto {
+            font-size: 16px;
+            font-style: italic;
+        }
+        
+        /* 主内容区布局 */
+        .main-container {
+            display: flex;
+            height: calc(100% - 160px);
+        }
+        
+        /* 左侧栏 */
+        .sidebar {
+            width: 280px;
+            background-color: white;
+            padding: 25px 20px;
+            border-right: 2px solid #eaeaea;
+            overflow-y: auto;
+        }
+        
+        .sidebar-title {
+            color: #1a5fb4;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-title i {
+            color: #ff6b35;
+        }
+        
+        .category-list {
+            list-style-type: none;
+            margin-bottom: 30px;
+        }
+        
+        .category-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #2d8cf0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .category-item:hover {
+            background-color: #e1efff;
+            transform: translateX(5px);
+        }
+        
+        .category-item.active {
+            background-color: #2d8cf0;
+            color: white;
+            border-left-color: #ff6b35;
+        }
+        
+        .category-count {
+            background-color: white;
+            color: #1a5fb4;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .active .category-count {
+            background-color: #ff6b35;
+            color: white;
+        }
+        
+        .quote-box {
+            background-color: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .quote-box h4 {
+            color: #ff6b35;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .quote-text {
+            font-style: italic;
+            line-height: 1.6;
+            color: #5d4037;
+        }
+        
+        /* 中央内容区 */
+        .content-area {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background-color: #f9fbfd;
+        }
+        
+        .section-title {
+            color: #1a5fb4;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .add-btn {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #e55a2b;
+        }
+        
+        .tasks-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .task-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid #2d8cf0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .task-card.important {
+            border-top-color: #ff6b35;
+        }
+        
+        .task-card.urgent {
+            border-top-color: #ff4757;
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .task-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a5fb4;
+        }
+        
+        .task-priority {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .priority-high {
+            background-color: #ffebee;
+            color: #ff4757;
+        }
+        
+        .priority-medium {
+            background-color: #fff8e1;
+            color: #ffb74d;
+        }
+        
+        .priority-low {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .task-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+        
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .task-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .task-status {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+        
+        .status-progress {
+            background-color: #fff8e1;
+            color: #ffb74d;
+        }
+        
+        .status-completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        /* 右侧栏 */
+        .right-sidebar {
+            width: 320px;
+            background-color: white;
+            padding: 25px 20px;
+            border-left: 2px solid #eaeaea;
+            overflow-y: auto;
+        }
+        
+        .reminder-title {
+            color: #1a5fb4;
+            font-size: 22px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reminder-list {
+            list-style-type: none;
+            margin-bottom: 30px;
+        }
+        
+        .reminder-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .reminder-item.important {
+            border-left-color: #ff6b35;
+        }
+        
+        .reminder-time {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .reminder-text {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .initial-heart {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px dashed #2d8cf0;
+        }
+        
+        .initial-heart h3 {
+            color: #1a5fb4;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .initial-heart h3 i {
+            color: #ff6b35;
+        }
+        
+        .initial-text {
+            line-height: 1.8;
+            color: #555;
+            font-size: 16px;
+            text-align: justify;
+        }
+        
+        .initial-text strong {
+            color: #ff6b35;
+        }
+        
+        /* 页脚 */
+        .footer {
+            background-color: #1a5fb4;
+            color: white;
+            padding: 15px 30px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .today-date {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .progress-summary {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .progress-item {
+            text-align: center;
+        }
+        
+        .progress-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd166;
+        }
+        
+        /* 传统装饰元素 */
+        .decoration {
+            position: absolute;
+            bottom: 70px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 107, 53, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #ff6b35;
+            opacity: 0.8;
+        }
+        
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部区域 -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="site-title">
+                <h1>个人事项提醒与督促</h1>
+                <p>不忘初心 · 方得始终</p>
+            </div>
+        </div>
+        <div class="user-info">
+            <div class="user-name">刘胤轩</div>
+            <div class="user-motto">业精于勤荒于嬉，行成于思毁于随</div>
+        </div>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <!-- 左侧栏 -->
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <i class="fas fa-tasks"></i>
+                事项分类
+            </div>
+            <ul class="category-list">
+                <li class="category-item active" data-category="all">
+                    全部事项
+                    <span class="category-count">12</span>
+                </li>
+                <li class="category-item" data-category="work">
+                    工作事业
+                    <span class="category-count">5</span>
+                </li>
+                <li class="category-item" data-category="study">
+                    学习成长
+                    <span class="category-count">4</span>
+                </li>
+                <li class="category-item" data-category="life">
+                    生活健康
+                    <span class="category-count">2</span>
+                </li>
+                <li class="category-item" data-category="relationship">
+                    人际关系
+                    <span class="category-count">1</span>
+                </li>
+            </ul>
+            
+            <div class="sidebar-title">
+                <i class="fas fa-calendar-check"></i>
+                近期完成
+            </div>
+            <ul class="category-list">
+                <li class="category-item">
+                    <div>周度计划复盘</div>
+                    <span class="status-completed">已完成</span>
+                </li>
+                <li class="category-item">
+                    <div>专业书籍阅读</div>
+                    <span class="status-completed">已完成</span>
+                </li>
+                <li class="category-item">
+                    <div>健身计划</div>
+                    <span class="status-progress">进行中</span>
+                </li>
+            </ul>
+            
+            <div class="quote-box">
+                <h4>初心提醒</h4>
+                <p class="quote-text">"不要因为走得太远，而忘记了为什么出发。时刻回顾自己的初心，才能保持方向，坚定前行。"</p>
+            </div>
+        </div>
+        
+        <!-- 中央内容区 -->
+        <div class="content-area">
+            <div class="section-title">
+                我的待办事项
+                <button class="add-btn" id="addTaskBtn">
+                    <i class="fas fa-plus"></i> 添加新事项
+                </button>
+            </div>
+            
+            <div class="tasks-container" id="tasksContainer">
+                <!-- 任务卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="section-title" style="margin-top: 30px;">
+                重要情景督促
+            </div>
+            
+            <div class="tasks-container">
+                <div class="task-card important">
+                    <div class="task-header">
+                        <div class="task-title">每周自我反思</div>
+                        <div class="task-priority priority-high">高优先级</div>
+                    </div>
+                    <div class="task-desc">
+                        每周日晚上进行本周总结与反思，检查是否偏离初心目标，记录成长与不足，制定下周改进计划。
+                    </div>
+                    <div class="task-footer">
+                        <div class="task-date">
+                            <i class="far fa-calendar-alt"></i>
+                            每周日 20:00
+                        </div>
+                        <div class="task-status status-pending">待开始</div>
+                    </div>
+                </div>
+                
+                <div class="task-card urgent">
+                    <div class="task-header">
+                        <div class="task-title">月度目标检查</div>
+                        <div class="task-priority priority-high">高优先级</div>
+                    </div>
+                    <div class="task-desc">
+                        每月最后一天检查本月目标完成情况，对照年初制定的"不忘初心"计划，调整下月行动方案。
+                    </div>
+                    <div class="task-footer">
+                        <div class="task-date">
+                            <i class="far fa-calendar-alt"></i>
+                            每月最后一天
+                        </div>
+                        <div class="task-status status-progress">进行中</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧栏 -->
+        <div class="right-sidebar">
+            <div class="reminder-title">
+                <i class="fas fa-bell"></i>
+                近期提醒
+            </div>
+            
+            <ul class="reminder-list">
+                <li class="reminder-item important">
+                    <div class="reminder-time">
+                        <i class="far fa-clock"></i>
+                        今天 18:30
+                    </div>
+                    <div class="reminder-text">健身训练 - 保持健康体魄</div>
+                </li>
+                <li class="reminder-item">
+                    <div class="reminder-time">
+                        <i class="far fa-clock"></i>
+                        明天 09:00
+                    </div>
+                    <div class="reminder-text">项目进度汇报会议准备</div>
+                </li>
+                <li class="reminder-item">
+                    <div class="reminder-time">
+                        <i class="far fa-clock"></i>
+                        后天 20:00
+                    </div>
+                    <div class="reminder-text">与导师交流职业发展计划</div>
+                </li>
+                <li class="reminder-item">
+                    <div class="reminder-time">
+                        <i class="far fa-clock"></i>
+                        本周六 14:00
+                    </div>
+                    <div class="reminder-text">阅读专业书籍《深度工作》2小时</div>
+                </li>
+            </ul>
+            
+            <div class="initial-heart">
+                <h3>
+                    <i class="fas fa-book-open"></i>
+                    我的初心誓言
+                </h3>
+                <div class="initial-text">
+                    <p>1. <strong>保持学习热情</strong>：不断精进专业技能，每月至少读完一本专业书籍。</p>
+                    <p>2. <strong>坚守职业操守</strong>：在工作中保持诚信、专业，为社会创造真实价值。</p>
+                    <p>3. <strong>平衡工作生活</strong>：重视身心健康，每周确保3次以上锻炼，保持工作与生活平衡。</p>
+                    <p>4. <strong>感恩与回馈</strong>：铭记帮助过我的人，在有能力时回馈社会，帮助他人。</p>
+                    <p>5. <strong>持续自我反思</strong>：定期反思是否偏离初心，及时调整人生航向。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <div class="footer">
+        <div class="today-date" id="todayDate">2024年7月15日 星期一</div>
+        <div class="progress-summary">
+            <div class="progress-item">
+                总任务：<span class="progress-value">12</span>
+            </div>
+            <div class="progress-item">
+                已完成：<span class="progress-value">8</span>
+            </div>
+            <div class="progress-item">
+                进行中：<span class="progress-value">3</span>
+            </div>
+            <div class="progress-item">
+                待完成：<span class="progress-value">1</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 装饰元素 -->
+    <div class="decoration">
+        勿忘初心
+    </div>
+    
+    <script>
+        // 初始化数据
+        const tasks = [
+            {
+                id: 1,
+                title: "完成季度工作报告",
+                category: "work",
+                description: "整理本季度工作成果、数据分析及下季度计划，确保数据准确，内容详实。",
+                priority: "high",
+                status: "progress",
+                date: "2024-07-20",
+                important: true
+            },
+            {
+                id: 2,
+                title: "学习新技术框架",
+                category: "study",
+                description: "掌握Vue 3.0核心概念与实践，完成一个小型项目应用。",
+                priority: "medium",
+                status: "pending",
+                date: "2024-07-25",
+                important: true
+            },
+            {
+                id: 3,
+                title: "年度体检安排",
+                category: "life",
+                description: "预约年度全面体检，关注身体健康指标变化。",
+                priority: "medium",
+                status: "pending",
+                date: "2024-08-10",
+                important: false
+            },
+            {
+                id: 4,
+                title: "团队建设活动",
+                category: "relationship",
+                description: "组织团队季度团建活动，加强团队凝聚力与沟通。",
+                priority: "low",
+                status: "progress",
+                date: "2024-07-28",
+                important: false
+            },
+            {
+                id: 5,
+                title: "专业证书考试准备",
+                category: "study",
+                description: "制定PMP认证考试复习计划，每天保证2小时学习时间。",
+                priority: "high",
+                status: "progress",
+                date: "2024-09-15",
+                important: true
+            },
+            {
+                id: 6,
+                title: "家庭聚会安排",
+                category: "life",
+                description: "组织本月家庭聚餐，与家人保持良好沟通与联系。",
+                priority: "low",
+                status: "pending",
+                date: "2024-07-30",
+                important: false
+            }
+        ];
+        
+        // DOM元素
+        const tasksContainer = document.getElementById('tasksContainer');
+        const categoryItems = document.querySelectorAll('.category-item');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const todayDateElement = document.getElementById('todayDate');
+        
+        // 初始化日期显示
+        function initDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            todayDateElement.textContent = now.toLocaleDateString('zh-CN', options);
+        }
+        
+        // 渲染任务卡片
+        function renderTasks(filterCategory = 'all') {
+            tasksContainer.innerHTML = '';
+            
+            const filteredTasks = filterCategory === 'all' 
+                ? tasks 
+                : tasks.filter(task => task.category === filterCategory);
+            
+            filteredTasks.forEach(task => {
+                const taskCard = document.createElement('div');
+                taskCard.className = `task-card ${task.important ? 'important' : ''}`;
+                
+                // 优先级映射
+                const priorityMap = {
+                    high: { text: '高优先级', class: 'priority-high' },
+                    medium: { text: '中优先级', class: 'priority-medium' },
+                    low: { text: '低优先级', class: 'priority-low' }
+                };
+                
+                // 状态映射
+                const statusMap = {
+                    pending: { text: '待开始', class: 'status-pending' },
+                    progress: { text: '进行中', class: 'status-progress' },
+                    completed: { text: '已完成', class: 'status-completed' }
+                };
+                
+                // 日期格式化
+                const taskDate = new Date(task.date);
+                const formattedDate = taskDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+                
+                taskCard.innerHTML = `
+                    <div class="task-header">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-priority ${priorityMap[task.priority].class}">
+                            ${priorityMap[task.priority].text}
+                        </div>
+                    </div>
+                    <div class="task-desc">${task.description}</div>
+                    <div class="task-footer">
+                        <div class="task-date">
+                            <i class="far fa-calendar-alt"></i>
+                            ${formattedDate}
+                        </div>
+                        <div class="task-status ${statusMap[task.status].class}">
+                            ${statusMap[task.status].text}
+                        </div>
+                    </div>
+                `;
+                
+                tasksContainer.appendChild(taskCard);
+                
+                // 添加点击事件
+                taskCard.addEventListener('click', () => {
+                    alert(`任务详情：\n\n${task.title}\n\n${task.description}\n\n截止日期：${task.date}\n优先级：${priorityMap[task.priority].text}\n状态：${statusMap[task.status].text}`);
+                });
+            });
+        }
+        
+        // 初始化分类点击事件
+        function initCategoryFilters() {
+            categoryItems.forEach(item => {
+                if (item.dataset.category) {
+                    item.addEventListener('click', () => {
+                        // 移除所有激活状态
+                        categoryItems.forEach(el => el.classList.remove('active'));
+                        // 添加当前激活状态
+                        item.classList.add('active');
+                        // 渲染对应分类的任务
+                        renderTasks(item.dataset.category);
+                    });
+                }
+            });
+        }
+        
+        // 添加新任务按钮事件
+        addTaskBtn.addEventListener('click', () => {
+            const newTask = {
+                id: tasks.length + 1,
+                title: "新任务",
+                category: "work",
+                description: "这是一个新添加的任务，请点击编辑任务详情。",
+                priority: "medium",
+                status: "pending",
+                date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7天后
+                important: false
+            };
+            
+            tasks.unshift(newTask);
+            renderTasks(document.querySelector('.category-item.active').dataset.category);
+            alert('新任务已添加！请点击任务卡片查看详情。');
+        });
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initDate();
+            renderTasks();
+            initCategoryFilters();
+            
+            // 添加简单的模拟数据更新
+            setInterval(() => {
+                const progressValues = document.querySelectorAll('.progress-value');
+                if (progressValues.length >= 4) {
+                    // 模拟任务状态变化
+                    const completed = Math.min(parseInt(progressValues[1].textContent) + 1, 12);
+                    const pending = Math.max(parseInt(progressValues[3].textContent) - 1, 0);
+                    
+                    progressValues[1].textContent = completed;
+                    progressValues[3].textContent = pending;
+                }
+            }, 15000); // 每15秒更新一次
+        });
+    </script>
+</body>
+</html>
